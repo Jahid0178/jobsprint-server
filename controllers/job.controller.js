@@ -2,7 +2,16 @@ const Job = require("../models/jobs.model");
 
 const getAllJobs = async (req, res) => {
   try {
-    const jobs = await Job.find();
+    let queryOptions = {
+      ...req.query,
+    };
+
+    if (req.query?.company) {
+      queryOptions.company = { $regex: req.query.company, $options: "i" };
+    }
+
+    const jobs = await Job.find(queryOptions);
+
     res
       .status(200)
       .json({ message: "Jobs found", count: jobs.length, data: jobs });
