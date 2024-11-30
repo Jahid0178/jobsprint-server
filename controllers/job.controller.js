@@ -152,6 +152,23 @@ const applyJob = async (req, res) => {
   }
 };
 
+const getAdminJobs = async (req, res) => {
+  try {
+    if (req.user.role !== "admin") {
+      return res
+        .status(400)
+        .json({ message: "Only admin user can get posted jobs" });
+    }
+    const adminJobs = await Job.find({ postedBy: req?.user?._id });
+
+    return res
+      .status(200)
+      .json({ message: "Admin jobs found", data: adminJobs });
+  } catch (error) {
+    console.log("get admin jobs error", error);
+  }
+};
+
 module.exports = {
   createJob,
   getAllJobs,
@@ -160,4 +177,5 @@ module.exports = {
   applyJob,
   getSingleJob,
   getAppliedJobs,
+  getAdminJobs,
 };
