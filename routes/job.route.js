@@ -6,11 +6,15 @@ const {
   updateJob,
   deleteJob,
   applyJob,
+  getSingleJob,
+  getAppliedJobs,
 } = require("../controllers/job.controller");
 const authenticatedMiddleware = require("../middlewares/authenticated-middleware");
 const adminMiddleware = require("../middlewares/adminMiddleware");
 
-router.get("/", authenticatedMiddleware, getAllJobs);
+router.get("/", getAllJobs);
+router.get("/appliedJobs", authenticatedMiddleware, getAppliedJobs);
+router.get("/:id", getSingleJob);
 router.post("/create", authenticatedMiddleware, adminMiddleware, createJob);
 router.put("/update/:id", authenticatedMiddleware, adminMiddleware, updateJob);
 router.delete(

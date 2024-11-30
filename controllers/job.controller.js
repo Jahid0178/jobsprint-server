@@ -45,6 +45,22 @@ const createJob = async (req, res) => {
   }
 };
 
+const getSingleJob = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const job = await Job.findById(id);
+
+    if (!job) {
+      return res.status(404).json({ message: "Job not found" });
+    }
+
+    res.status(200).json({ message: "Job found", data: job });
+  } catch (error) {
+    console.log("update job error", error);
+  }
+};
+
 const updateJob = async (req, res) => {
   try {
     const { id } = req.params;
@@ -97,6 +113,18 @@ const deleteJob = async (req, res) => {
   }
 };
 
+const getAppliedJobs = async (req, res) => {
+  try {
+    const appliedJobs = await User.findById(req?.user?._id)
+      .populate("appliedJobs")
+      .select("appliedJobs");
+
+    res.status(200).json({ message: "Applied jobs found", data: appliedJobs });
+  } catch (error) {
+    console.log("get applied jobs error", error);
+  }
+};
+
 const applyJob = async (req, res) => {
   try {
     const { id } = req.params;
@@ -124,4 +152,12 @@ const applyJob = async (req, res) => {
   }
 };
 
-module.exports = { createJob, getAllJobs, updateJob, deleteJob, applyJob };
+module.exports = {
+  createJob,
+  getAllJobs,
+  updateJob,
+  deleteJob,
+  applyJob,
+  getSingleJob,
+  getAppliedJobs,
+};

@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -9,6 +10,13 @@ const userRouter = require("./routes/user.route");
 const jobRouter = require("./routes/job.route");
 const authenticatedMiddleware = require("./middlewares/authenticated-middleware");
 
+const corsOptions = {
+  origin: "*",
+  credentials: true,
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+};
+
+app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.json());
 

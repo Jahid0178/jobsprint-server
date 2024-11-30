@@ -1,7 +1,15 @@
 const jwt = require("jsonwebtoken");
 
 const authenticatedMiddleware = (req, res, next) => {
-  const token = req.cookies["jobsprint-auth-token"];
+  // const token = req.cookies["jobsprint-auth-token"];
+  const authHeader = req.headers["authorization"]; // Get the authorization header
+
+  if (!authHeader) {
+    return res.status(401).json({ message: "Authorization header missing" });
+  }
+
+  const token = authHeader.split(" ")[1]; // Bearer <token>
+
   if (!token) {
     return res.status(401).json({ message: "Unauthorized" });
   }

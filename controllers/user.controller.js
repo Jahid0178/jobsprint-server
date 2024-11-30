@@ -71,16 +71,23 @@ const loginUser = async (req, res) => {
       }
     );
 
-    res.cookie("jobsprint-auth-token", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
+    res.status(200).json({
+      message: "User logged in successfully",
+      token,
+      data: existingUser,
     });
-
-    res.status(200).json({ message: "User logged in successfully", token });
   } catch (error) {
     console.log("login user error", error);
   }
 };
 
-module.exports = { registerUser, loginUser };
+const logoutUser = async (req, res) => {
+  try {
+    res.clearCookie("jobsprint-auth-token");
+    res.status(200).json({ message: "User logged out successfully" });
+  } catch (error) {
+    console.log("logout user error", error);
+  }
+};
+
+module.exports = { registerUser, loginUser, logoutUser };
